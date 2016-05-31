@@ -16,7 +16,6 @@ $.post("getInfobR.php", { toDate: td, fromDate: fd }, function(result){
       });
       html_out += "</table>";
 			$("#demo").html(html_out);
-			$("#downloads").attr("style", "visibility: visible");
 }, "json");
 ```
 where td and fd are start date of reservation and end date of reservation respectively, using format D-M-YYYY.
