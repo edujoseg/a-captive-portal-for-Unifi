@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="banner">
-<img src="../css/images/casabaluarte.png" alt="Hostal Casa Baluarte">
+<img src="../css/images/" alt="">
 <h1>Portal de Administraci&oacute;n</h1>
 </div> <!-- banner end -->
 
