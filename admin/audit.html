@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+<script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+<script   src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"   integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="   crossorigin="anonymous"></script>
+<script src="../js/excellentexport.min.js"></script>
+<script src="../js/moment-with-locales.min.js"></script>
+
+<link rel="stylesheet" href="../css/jquery-ui.css">
+<link rel="stylesheet" href="../css/style.css">
+
+<title>Portal para auditoría</title>
+</head>
+<body>
+<div id="banner">
+<img src="../css/images/casabaluarte.png" alt="Hostal Casa Baluarte">
+<h1>Portal de Administraci&oacute;n</h1>
+</div> <!-- banner end -->
+
+<div id="form">
+
+<div id="leftpanel">
+
+<label for="dfrom">Fecha Inicio</label>
+<input id="dfrom" type="text" name="dfrom" readonly><br />
+<label for="dto">Fecha Final</label>
+<input id="dto" type="text" name="dto" readonly><br />
+
+<button id="generar">generar</button>
+<span id="downloads">
+<a download="invoices.xls" href="#" onclick="return ExcellentExport.excel(this, 'datatable', 'Sheet Name Here');">Exportar a Excel</a>
+<a download="invoices.csv" href="#" onclick="return ExcellentExport.csv(this, 'datatable');">Exportar a CSV</a>
+</span>
+
+
+
+</div> <!-- leftpanel end-->
+
+</div> <!-- form end -->
+<div id="demo"></div>
+<script>
+
+	$("#dto").datepicker({dateFormat: "dd-mm-yy"});
+	$("#dfrom").datepicker({dateFormat: "dd-mm-yy"});
+
+	$("#generar").click(function() {
+		$("#demo").html("");
+		var a = moment($("#dfrom").val(),'D-M-YYYY');
+		var b = moment($("#dto").val(),'D-M-YYYY');
+		if (b.diff(a, 'days') > 25) {
+			if(!confirm("ADVERTENCIA: El número de consultas a Zak puede exceder las 600 consultas en un período de 3600 segundos. ¿Desea continuar?")) return;
+		}
+		var html_out = "";
+		$.post("getInfobR.php", { toDate: $("#dto").val(), fromDate: $("#dfrom").val() }, function(result){
+			html_out += "<table id='datatable'><tr><th>rcode</th><th>sn</th><th>vat_8</th><th>vat_16</th>	<th>camount</th><th>dpayamount</th><th>gen_doc_type</th><th>get_doc_number</th><th>birthdate</th><th>first_name</th><th>last_name</th><th>cash</th><th>cc</th><th>other</th><th>adults</th><th>th</th><th>dfrom</th><th>dto</th></tr>";
+			$.each(result, function(index, obj) {
+				html_out += "<tr>";
+				$.each(obj, function(key, value) {
+					html_out += "<td>" + value + "</td>";
+				});
+				html_out += "</tr>";
+			});
+			html_out += "</table>";
+			$("#demo").html(html_out);
+			$("#downloads").attr("style", "visibility: visible");
+		}, "json");
+	});
+
+</script>
