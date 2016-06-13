@@ -15,7 +15,7 @@ if (!$db) {
 }
 
 
-$sql = "DELETE FROM macs WHERE idUsuario IN (SELECT id FROM usuarios WHERE dto < strftime('%s','now'));DELETE FROM usuarios WHERE dto < strftime('%s','now');";
+$sql = "DELETE FROM macs WHERE idUsuario IN (SELECT id FROM usuarios WHERE dto < strftime('%s','now') AND (dto LIKE '*ndefined' OR dfrom LIKE '*ndefined');DELETE FROM usuarios WHERE dto < strftime('%s','now');";
 
         $ret = $db->exec($sql);
         if (!$ret) {
